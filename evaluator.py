@@ -25,7 +25,7 @@ evaluate_template = """
 英語翻訳:
 {english}
 
-評価出力："""
+評価出力:"""
 
 class Evaluator:
 
