@@ -6,10 +6,10 @@ class OpenAIApi:
     """
     A wrapper class for interacting with the OpenAI API.
     """
-    def __init__(self, api_key: str, model: str = "gpt-4-0613", system_prompt: Optional[str] = None) -> None:
+    def __init__(self, api_key: str, model: str = "gpt-4-0613", system_prompt: Optional[str] = None, temperature = 0) -> None:
         """
         Initialize the OpenAIApi object.
-        
+
         Parameters:
         - api_key: The API key for OpenAI
         - model: The model name
@@ -18,6 +18,7 @@ class OpenAIApi:
         openai.api_key = api_key
         self.model = model
         self.system_prompt = system_prompt or ""
+        self.temperature = temperature
 
     def get_response(self, system_prompt: Optional[str] = None, user_prompt: Optional[str] = None) -> 'ChatResponse':
         """
@@ -33,6 +34,7 @@ class OpenAIApi:
         try:
             completion = openai.ChatCompletion.create(
                 model=self.model,
+                temperature=self.temperature,
                 messages=[
                     {"role": "system", "content": system_prompt or self.system_prompt},
                     {"role": "user", "content": user_prompt or ""}
