@@ -1,4 +1,4 @@
-from openai_api import OpenAIApi
+from openai_api import OpenAIApi, ChatResponse
 
 translate_template = """
 ##prerequisites
@@ -26,10 +26,10 @@ class Translator:
     def __init__(self, api_key, model, system_prompt) -> None:
         self.api = OpenAIApi(api_key, model, system_prompt)
 
-    def to_english(self, input):
+    def to_english(self, input) -> "ChatResponse":
         # here i wanna create complete prompt for openai api
         prompt = translate_template.format(input=input)
         print(prompt)
-        response = self.api.get_response(prompt)
+        response:ChatResponse = self.api.get_response(prompt)
 
         return response

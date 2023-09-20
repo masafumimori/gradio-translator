@@ -9,12 +9,12 @@ def create_meeting_summary(openai_key, model_name,system_prompt, prompt_text):
                     system_prompt=system_prompt if not system_prompt else "You are a helpful assistant.")
     try:
         response = translator.to_english(input=prompt_text)
-        evaluation = evaluator.evaluate(japanese=prompt_text, english=response)
+        evaluation = evaluator.evaluate(japanese=prompt_text, english=response.message)
 
-        return response, evaluation
+        return response.message, evaluation.message
 
     except Exception as e:
-        return f"An error occurred: {str(e)}"
+        return f"An error occurred: {str(e)}", ""
 
 inputs = [
     gr.Textbox(lines=1, label="openai_key"),

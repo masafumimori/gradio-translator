@@ -1,4 +1,4 @@
-from openai_api import OpenAIApi
+from openai_api import OpenAIApi,ChatResponse
 
 evaluate_template = """
 ##prerequisites
@@ -18,14 +18,16 @@ evaluate_template = """
 {japanese}
 
 英語翻訳:
-{english}"""
+{english}
+
+評価出力："""
 
 class Evaluator:
 
     def __init__(self, api_key, model, system_prompt) -> None:
         self.api = OpenAIApi(api_key, model, system_prompt)
 
-    def evaluate(self, japanese, english):
+    def evaluate(self, japanese, english) -> "ChatResponse":
         prompt = evaluate_template.format(japanese=japanese, english=english)
         print(prompt)
 
