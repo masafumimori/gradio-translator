@@ -1,3 +1,8 @@
+class EvaluationError(Exception):
+    """Custom exception for evaluation errors"""
+    def __init__(self, message):
+        super().__init__(message)
+
 from openai_api import OpenAIApi,ChatResponse
 
 evaluate_template = """
@@ -31,6 +36,8 @@ class Evaluator:
         prompt = evaluate_template.format(japanese=japanese, english=english)
         print(prompt)
 
-        response = self.api.get_response(prompt)
-
+        try:
+            response = self.api.get_response(prompt)
+        except Exception as e:
+            raise EvaluationError(f"Something went wrong while evaluating: {str(e)}")
         return response

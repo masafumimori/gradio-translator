@@ -1,3 +1,8 @@
+class TranslationError(Exception):
+    """Custom exception for translation errors"""
+    def __init__(self, message):
+        super().__init__(message)
+
 from openai_api import OpenAIApi, ChatResponse
 
 translate_template = """
@@ -30,6 +35,10 @@ class Translator:
         # here i wanna create complete prompt for openai api
         prompt = translate_template.format(input=input)
         print(prompt)
-        response:ChatResponse = self.api.get_response(prompt)
+        try:
+            response:ChatResponse = self.api.get_response(prompt)
+        except Exception as e:
+            raise TranslationError(f"Something went wrong while translating: {str(e)}")
 
         return response
+

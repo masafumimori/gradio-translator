@@ -1,8 +1,8 @@
 import gradio as gr
-from translator import Translator
-from evaluator import Evaluator
+from translator import Translator, TranslationError
+from evaluator import Evaluator, EvaluationError
 
-def create_meeting_summary(openai_key, model_name,system_prompt, prompt_text):
+def translate_and_evaluate(openai_key, model_name,system_prompt, prompt_text):
     translator = Translator(openai_key, model=model_name,
                     system_prompt=system_prompt if not system_prompt else "You are a helpful assistant.")
     evaluator = Evaluator(openai_key, model=model_name,
@@ -13,6 +13,10 @@ def create_meeting_summary(openai_key, model_name,system_prompt, prompt_text):
 
         return response.message, evaluation.message
 
+    except TranslationError as e:
+        return str(e), ""
+    except EvaluationError as e:
+        return response.message, str(e)
     except Exception as e:
         return f"An error occurred: {str(e)}", ""
 
@@ -37,7 +41,7 @@ outputs = [
     gr.Textbox(label="Evaluation"),
 ]
 app = gr.Interface(
-    fn=create_meeting_summary,
+    fn=translate_and_evaluate,
     inputs=inputs,
     outputs=outputs,
     title="Translator from Japanese to English",
