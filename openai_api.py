@@ -28,3 +28,33 @@ class OpenAIApi:
 
         except Exception as e:
             raise Exception(f"Something went wrong while getting response from OpenAI: {str(e)}")
+
+
+class ChatResponse:
+    """
+    A class representing the chat response from OpenAI.
+    """
+    def __init__(self, message: str, total_tokens: int) -> None:
+        """
+        Initialize the ChatResponse object.
+
+        Parameters:
+        - message: The message content
+        - total_tokens: The total token count
+        """
+        self._message = message
+        self._total_tokens = total_tokens
+
+    @property
+    def message(self) -> str:
+        """
+        Get the message content.
+        """
+        return self._message
+
+    @property
+    def total_tokens(self) -> int:
+        """
+        Get the total token count.
+        """
+        return self._total_tokens
