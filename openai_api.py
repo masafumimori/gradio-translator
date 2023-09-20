@@ -1,30 +1,46 @@
+from typing import Optional
+
 import openai
 
 class OpenAIApi:
-    def __init__(self, api_key, model = "gpt-4-0613", system_prompt= ""):
-        if not api_key:
-            raise Exception("OpenAI API Key must be specified.")
-
+    """
+    A wrapper class for interacting with the OpenAI API.
+    """
+    def __init__(self, api_key: str, model: str = "gpt-4-0613", system_prompt: Optional[str] = None) -> None:
+        """
+        Initialize the OpenAIApi object.
+        
+        Parameters:
+        - api_key: The API key for OpenAI
+        - model: The model name
+        - system_prompt: An optional system prompt
+        """
         openai.api_key = api_key
         self.model = model
-        self.system_prompt = system_prompt
+        self.system_prompt = system_prompt or ""
 
-    def get_response(self, system_prompt = "", user_prompt = ""):
+    def get_response(self, system_prompt: Optional[str] = None, user_prompt: Optional[str] = None) -> 'ChatResponse':
+        """
+        Get a chat response from the OpenAI API.
 
-        if not system_prompt and not self.system_prompt:
+        Parameters:
+        - system_prompt: An optional system prompt
+        - user_prompt: The user's prompt
+        """
+        if not self.system_prompt and not system_prompt:
             raise Exception("System prompt must be specified.")
 
         try:
-
             completion = openai.ChatCompletion.create(
                 model=self.model,
                 messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt}
+                    {"role": "system", "content": system_prompt or self.system_prompt},
+                    {"role": "user", "content": user_prompt or ""}
                 ]
             )
-            response_text = completion.choices[0].message.content
-            return response_text
+            message = completion.choices[0].message.content
+            total_tokens = completion.usage.total_tokens
+            return ChatResponse(message, total_tokens)
 
         except Exception as e:
             raise Exception(f"Something went wrong while getting response from OpenAI: {str(e)}")
