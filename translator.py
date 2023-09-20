@@ -32,9 +32,7 @@ class Translator:
         self.api = OpenAIApi(api_key, model, system_prompt)
 
     def to_english(self, input) -> "ChatResponse":
-        # here i wanna create complete prompt for openai api
         prompt = translate_template.format(input=input)
-        print(prompt)
         try:
             response:ChatResponse = self.api.get_response(prompt)
         except Exception as e:

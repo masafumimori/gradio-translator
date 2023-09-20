@@ -34,7 +34,6 @@ class Evaluator:
 
     def evaluate(self, japanese, english) -> "ChatResponse":
         prompt = evaluate_template.format(japanese=japanese, english=english)
-        print(prompt)
 
         try:
             response = self.api.get_response(prompt)
